@@ -8,6 +8,13 @@ import { dirname, join } from 'path';
 import { existsSync } from 'fs';
 
 import config from './config.js';
+
+if (!config.encryptionKey || config.encryptionKey === 'dev-secret-change-me') {
+  console.error('ERROR: ENCRYPTION_KEY is not set or is still the default placeholder.');
+  console.error('Generate a key with: openssl rand -hex 32');
+  process.exit(1);
+}
+
 import { getDb } from './db/database.js';
 import authRouter from './routes/auth.js';
 import activitiesRouter from './routes/activities.js';
