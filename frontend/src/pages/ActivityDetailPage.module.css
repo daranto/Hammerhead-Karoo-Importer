@@ -1,0 +1,133 @@
+.page {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 16px 24px;
+  box-sizing: border-box;
+}
+
+.center {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.error {
+  color: var(--red);
+}
+
+.backBtn {
+  background: none;
+  border: none;
+  color: var(--accent2);
+  font-size: 0.95rem;
+  padding: 6px 0;
+  font-weight: 500;
+}
+
+.backBtn:hover { color: var(--text); }
+
+.titleSection {
+  padding: 16px 0 0;
+  margin-bottom: 20px;
+}
+
+.titleRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.shareBtn {
+  background: var(--accent);
+  border: none;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 8px 20px;
+  border-radius: var(--radius);
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.shareBtn:hover { background: var(--accent2); }
+
+.name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.date {
+  color: var(--text2);
+  font-size: 0.9rem;
+}
+
+.section {
+  margin-bottom: 20px;
+}
+
+.sectionTitle {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text2);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.unit {
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  opacity: 0.7;
+}
+
+.chartHeader {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: grab;
+  user-select: none;
+  width: fit-content;
+  touch-action: none;
+}
+
+.chartHeader:active {
+  cursor: grabbing;
+}
+
+.grip {
+  color: var(--text2);
+  opacity: 0.3;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+
+.chartHeader:hover .grip {
+  opacity: 0.8;
+}
+
+.chartHeader .sectionTitle {
+  margin-bottom: 0;
+}
+
+.dragging {
+  opacity: 0.4;
+}

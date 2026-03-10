@@ -1,0 +1,70 @@
+.map {
+  width: 100%;
+  height: 380px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg3);
+}
+
+@media (max-width: 600px) {
+  .map { height: 260px; }
+}
+
+/* ── Km marker sits above direction arrows ───────────────────── */
+:global(.km-marker-icon) {
+  z-index: 500 !important;
+}
+
+/* ── Km milestone label on the map ───────────────────────────── */
+:global(.km-label) {
+  display: inline-block;
+  background: #1a2535;
+  border: 1.5px solid #4caf7a;
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-family: system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: #4caf7a;
+  white-space: nowrap;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+  cursor: default;
+  user-select: none;
+}
+
+/* ── Tooltip container (overrides Leaflet default white box) ─── */
+:global(.km-tooltip) {
+  background: #1a2535 !important;
+  border: 1px solid #2a3f5f !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+  padding: 0 !important;
+}
+
+:global(.km-tooltip::before) {
+  border-top-color: #2a3f5f !important;
+}
+
+:global(.km-tip-inner) {
+  font-family: system-ui, sans-serif;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #e8eaf0;
+  padding: 7px 10px;
+}
+
+:global(.km-tip-title) {
+  font-weight: 700;
+  color: #4caf7a;
+  margin-bottom: 3px;
+}
+
+:global(.km-tip-inner table) {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+:global(.tt-lbl) {
+  color: #8899aa;
+  padding-right: 10px;
+}

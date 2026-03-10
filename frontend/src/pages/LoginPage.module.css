@@ -1,0 +1,121 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: radial-gradient(ellipse at center, #1a1a2e 0%, #0f0f1a 70%);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: var(--shadow);
+}
+
+.langRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+.langBtn, .langActive {
+  background: none;
+  border: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  color: var(--text2);
+}
+.langActive { color: var(--accent); }
+.langSep { color: var(--border); font-size: 0.8rem; }
+
+.logo { text-align: center; margin-bottom: 16px; }
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.subtitle {
+  color: var(--text2);
+  text-align: center;
+  font-size: 0.88rem;
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+
+.error {
+  background: rgba(224, 80, 80, 0.15);
+  border: 1px solid var(--red);
+  color: #ff8080;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  font-size: 0.88rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text2);
+}
+
+.input {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 11px 14px;
+  color: var(--text);
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.submitBtn {
+  width: 100%;
+  background: var(--accent);
+  border: none;
+  color: white;
+  padding: 12px;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 4px;
+  transition: background 0.2s;
+}
+
+.submitBtn:hover:not(:disabled) { background: var(--accent2); }
+.submitBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.note {
+  margin-top: 24px;
+  text-align: center;
+  color: var(--text2);
+  font-size: 0.78rem;
+}

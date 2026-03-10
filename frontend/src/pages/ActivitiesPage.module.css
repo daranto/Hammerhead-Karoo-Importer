@@ -1,0 +1,220 @@
+.page {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 16px 24px;
+  box-sizing: border-box;
+}
+
+/* ── Action toolbar ── */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+
+button.uploadBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+button.uploadBtn:hover {
+  border-color: var(--accent);
+  background: rgba(224, 92, 42, 0.1);
+}
+
+/* ── Split sync button ── */
+.syncGroup {
+  position: relative;
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  transition: border-color 0.2s;
+}
+
+.syncGroup:has(button:not(:disabled)):hover {
+  border-color: var(--accent);
+}
+
+.syncMain,
+.syncArrow {
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.syncMain {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: calc(var(--radius) - 1px) 0 0 calc(var(--radius) - 1px);
+}
+
+.syncArrow {
+  display: flex;
+  align-items: center;
+  padding: 8px 8px;
+  border-left: 1px solid var(--border);
+  border-radius: 0 calc(var(--radius) - 1px) calc(var(--radius) - 1px) 0;
+}
+
+.syncMain:hover,
+.syncArrow:hover {
+  background: rgba(224, 92, 42, 0.1);
+}
+
+.syncMain:disabled,
+.syncArrow:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.chevronUp {
+  transform: rotate(180deg);
+}
+
+.syncDropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  z-index: 100;
+  white-space: nowrap;
+}
+
+.syncDropItem {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  padding: 8px 10px;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.syncDropItem:hover {
+  background: rgba(224, 92, 42, 0.1);
+  color: var(--accent);
+}
+
+.syncMsg {
+  background: rgba(76, 175, 122, 0.15);
+  border: 1px solid var(--green);
+  color: var(--green);
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+}
+
+.uploadArea {
+  margin-bottom: 20px;
+}
+
+.error {
+  background: rgba(224, 80, 80, 0.15);
+  border: 1px solid var(--red);
+  color: #ff8080;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text2);
+  line-height: 2;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.sentinel { height: 1px; }
+
+.sortBar {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.sortBtn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 11px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text2);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.sortBtn:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.sortActive {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(224, 92, 42, 0.08);
+}
+
+.spinning {
+  animation: spin 0.9s linear infinite;
+}
