@@ -19,12 +19,16 @@ This tool is designed for personal, local use only. It stores your SRAM/Hammerhe
 
 ## Features
 
-- **Auto-sync** from Hammerhead API via SRAM ID OAuth2 PKCE
-- **Interactive maps** with Leaflet/OSM – route overview + start/finish markers
-- **Elevation profile** in pure SVG (no charting library)
-- **Stats grid** – distance, time, elevation, speed, HR, power, cadence, calories
-- **Share image** – 1200×630 PNG canvas with GPS route and selectable stats, exported via Web Share API or download
-- **FIT file upload** – drag & drop `.fit` files, parsed locally
+- **Auto-sync** from Hammerhead API via SRAM ID OAuth2 PKCE login
+- **Force sync** – re-fetches all activities and clears cached GPS records to pick up new data
+- **Interactive maps** with Leaflet/OSM – route with direction arrows, km markers, start/finish dots
+- **Charts** – elevation, speed, pace, heart rate, power, cadence, temperature (draggable / reorderable)
+- **Stats grid** – distance, moving time, elapsed time, elevation, speed, pace, HR, power, cadence, calories, temperature
+- **Calorie estimation** – power-based, HR/Swain formula, or MET-based when no native value is present
+- **User profile** – body weight, age, gender stored for calorie calculation
+- **Share image** – dynamic-height PNG canvas with GPS route, selectable stats & charts, horizontal or vertical layout, language-aware labels; exported via Web Share API or download; preferences remembered
+- **FIT & GPX upload** – drag & drop, parsed locally
+- **Full encryption at rest** – every sensitive field in the SQLite database (tokens, activity names, polylines, files, profile) is AES-256-GCM encrypted; the DB is unreadable without `ENCRYPTION_KEY`
 - **PWA** – installable on iOS/Android when accessed over a trusted local network
 - **Self-hosted** – SQLite database, Docker deployment
 
@@ -35,7 +39,7 @@ This tool is designed for personal, local use only. It stores your SRAM/Hammerhe
 ```bash
 # 1. Copy environment config
 cp .env.example .env
-# Edit .env: set SESSION_SECRET and SERVER_BASE_URL
+# Edit .env: set ENCRYPTION_KEY and SERVER_BASE_URL
 
 # 2. Install & start backend
 cd backend && npm install
@@ -59,7 +63,7 @@ curl -O https://raw.githubusercontent.com/daranto/Hammerhead-Karoo-Importer/main
 
 # 2. Configure
 cp .env.example .env
-# Edit .env: set SESSION_SECRET (any long random string)
+# Edit .env: set ENCRYPTION_KEY (generate with: openssl rand -hex 32)
 
 # 3. Run
 docker compose pull
@@ -72,7 +76,7 @@ Open http://localhost:3001
 
 ```bash
 cp .env.example .env
-# Edit .env: set SESSION_SECRET
+# Edit .env: set ENCRYPTION_KEY
 
 docker compose up -d --build
 ```
@@ -92,10 +96,12 @@ Open http://localhost:3001
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `SESSION_SECRET` | 32+ char random string | *required* |
+| `ENCRYPTION_KEY` | 32-byte hex key – encrypts all data at rest (`openssl rand -hex 32`) | *required* |
 | `SERVER_BASE_URL` | URL of the app (local only) | `http://localhost:3001` |
 | `DB_PATH` | SQLite database path | `/app/data/hammerhead.db` |
 | `PORT` | HTTP port | `3001` |
+
+> **Important:** keep `ENCRYPTION_KEY` secret and back it up. Losing it means losing access to all stored data. The SQLite database is fully encrypted and unreadable without this key.
 
 ## Tech Stack
 
