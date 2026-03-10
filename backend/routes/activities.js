@@ -204,7 +204,7 @@ function transposeColumns(colData, activityId) {
   const elevations = colData.elevation || colData.altitude || [];
   const distances = colData.distance || [];
   const speeds = colData.speed || [];
-  const hrs = colData.heart_rate || colData.heartRate || [];
+  const hrs = colData.heartrate || colData.heart_rate || colData.heartRate || [];
   const powers = colData.power || [];
   const cadences = colData.cadence || [];
   const temps = colData.temperature || [];

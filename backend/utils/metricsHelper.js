@@ -28,7 +28,7 @@ export function extractMetrics(activity) {
     distance_m:       num(info.TYPE_DISTANCE_ID ?? activity.distance),
     elevation_gain_m: num(info.TYPE_ELEVATION_GAIN_ID ?? activity.elevationGain),
     avg_speed_ms:     num(info.TYPE_AVERAGE_SPEED_ID ?? activity.avgSpeed),
-    avg_hr:           num(info.TYPE_AVERAGE_HEART_RATE_ID ?? activity.avgHeartRate),
+    avg_hr:           num(info.TYPE_AVERAGE_HR_ID ?? info.TYPE_AVERAGE_HEART_RATE_ID ?? activity.avgHeartRate),
     avg_power:        num(info.TYPE_AVERAGE_POWER_ID ?? activity.avgPower),
     avg_cadence:      num(info.TYPE_AVERAGE_CADENCE_ID ?? activity.avgCadence),
     calories:         num(info.TYPE_CALORIES_ID ?? activity.calories),
