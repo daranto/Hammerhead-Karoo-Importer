@@ -29,6 +29,11 @@ export default defineConfig({
         ],
       },
       workbox: {
+        // Do not serve navigation requests (HTML page loads) from the SW
+        // cache.  Without this, reverse-proxy auth middleware (Authelia, …)
+        // can never intercept a page reload because the SW always responds
+        // with the cached index.html before the request reaches the network.
+        navigateFallback: null,
         runtimeCaching: [
           {
             urlPattern: /^\/api\/activities/,

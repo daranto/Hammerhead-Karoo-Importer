@@ -19,8 +19,16 @@ export async function apiFetch(url, options = {}) {
   });
 
   if (res.type === 'opaqueredirect') {
-    // Auth proxy redirected to an external login page.
-    // Reload so the browser handles the redirect as a normal navigation.
+    // Auth proxy (Authelia, …) redirected to an external login page.
+    // We must NOT use window.location.reload() directly: the PWA service
+    // worker would intercept the navigation and serve the cached index.html,
+    // so Authelia would never see the request → infinite loop.
+    // Unregistering the SW first forces the subsequent navigation to go to
+    // the network, where Caddy/Authelia can redirect to the login page.
+    try {
+      const reg = await navigator.serviceWorker?.getRegistration();
+      await reg?.unregister();
+    } catch { /* ignore — proceed with reload even if unregister fails */ }
     window.location.reload();
     return new Promise(() => {}); // never resolves — page is navigating away
   }
