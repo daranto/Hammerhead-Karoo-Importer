@@ -68,6 +68,7 @@ const DEFAULT_TOGGLES = {
 export default function ShareModal({ activity, polyline, records, onClose }) {
   const { t, lang } = useT();
   const [orientation, setOrientation] = useState('horizontal');
+  const [privacy, setPrivacy] = useState(true);
   const [toggles, setToggles] = useState(DEFAULT_TOGGLES);
   const [chartToggles, setChartToggles] = useState({});
   const [preview, setPreview] = useState(null);
@@ -81,6 +82,7 @@ export default function ShareModal({ activity, polyline, records, onClose }) {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
       if (saved.orientation) setOrientation(saved.orientation);
+      if (saved.privacy != null) setPrivacy(saved.privacy);
       if (saved.toggles) setToggles((prev) => ({ ...prev, ...saved.toggles }));
       if (saved.chartToggles) setChartToggles(saved.chartToggles);
     } catch { /* ignore */ }
@@ -91,9 +93,9 @@ export default function ShareModal({ activity, polyline, records, onClose }) {
   useEffect(() => {
     if (!prefsLoaded) return;
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ orientation, toggles, chartToggles }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ orientation, privacy, toggles, chartToggles }));
     } catch { /* ignore */ }
-  }, [orientation, toggles, chartToggles, prefsLoaded]);
+  }, [orientation, privacy, toggles, chartToggles, prefsLoaded]);
 
   /* Only show stat toggles for stats the activity actually has */
   const availableStats = useMemo(() =>
@@ -149,6 +151,7 @@ export default function ShareModal({ activity, polyline, records, onClose }) {
     orientation,
     records: records ?? [],
     chartKeys,
+    privacy,
   });
 
   const updatePreview = useCallback(async () => {
@@ -216,6 +219,32 @@ export default function ShareModal({ activity, polyline, records, onClose }) {
                   {t(`share.${o}`)}
                 </button>
               ))}
+            </div>
+          </div>
+
+          <div className={styles.orientationRow}>
+            <span className={styles.togglesLabel}>{t('share.mapMode')}</span>
+            <div className={styles.orientationBtns}>
+              <button
+                className={`${styles.orientBtn} ${privacy ? styles.orientActive : ''}`}
+                onClick={() => setPrivacy(true)}
+              >
+                <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <rect x="3" y="7" width="10" height="8" rx="1.5"/>
+                  <path d="M5 7V5a3 3 0 0 1 6 0v2"/>
+                </svg>
+                {t('share.mapPrivate')}
+              </button>
+              <button
+                className={`${styles.orientBtn} ${!privacy ? styles.orientActive : ''}`}
+                onClick={() => setPrivacy(false)}
+              >
+                <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <circle cx="8" cy="7" r="2.5"/>
+                  <path d="M8 2C5.24 2 3 4.24 3 7c0 3.75 5 9 5 9s5-5.25 5-9c0-2.76-2.24-5-5-5z"/>
+                </svg>
+                {t('share.mapDetail')}
+              </button>
             </div>
           </div>
 

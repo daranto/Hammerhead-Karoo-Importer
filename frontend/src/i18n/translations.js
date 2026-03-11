@@ -112,6 +112,9 @@ export const de = {
     tCalories:     'Kalorien',
     tAvgTemp:      'Ø Temp.',
     tDate:         'Datum',
+    mapMode:       'Karte',
+    mapPrivate:    'Anonym',
+    mapDetail:     'Detail',
   },
   credentials: {
     removeConfirm: 'Zugangsdaten dauerhaft entfernen?\nDu musst dich danach neu anmelden.',
@@ -283,6 +286,9 @@ export const en = {
     tCalories:     'Calories',
     tAvgTemp:      'Avg Temp.',
     tDate:         'Date',
+    mapMode:       'Map',
+    mapPrivate:    'Private',
+    mapDetail:     'Detail',
   },
   credentials: {
     removeConfirm: 'Remove stored credentials?\nYou will need to sign in again.',

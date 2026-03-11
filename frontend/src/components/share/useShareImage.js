@@ -24,11 +24,11 @@ function latLngToPixel(lat, lng, zoom) {
   return { x, y };
 }
 
-function getBestZoom(minLat, maxLat, minLng, maxLng, mapW, mapH) {
-  for (let z = 15; z >= 4; z--) {
+function getBestZoom(minLat, maxLat, minLng, maxLng, mapW, mapH, maxZoom = 15, fillFactor = 0.75) {
+  for (let z = maxZoom; z >= 4; z--) {
     const tl = latLngToPixel(maxLat, minLng, z);
     const br = latLngToPixel(minLat, maxLng, z);
-    if (br.x - tl.x <= mapW * 0.75 && br.y - tl.y <= mapH * 0.75) return z;
+    if (br.x - tl.x <= mapW * fillFactor && br.y - tl.y <= mapH * fillFactor) return z;
   }
   return 4;
 }
@@ -160,6 +160,7 @@ function loadTile(tx, ty, zoom) {
  * @param {string}   orientation   - 'horizontal' | 'vertical'
  * @param {Array}    records       - GPS record objects
  * @param {string[]} chartKeys     - Keys of charts to render
+ * @param {boolean}  privacy       - true = zoomed out (social media); false = closer zoom (friends)
  */
 export function useShareImage({
   activityName = '',
@@ -170,6 +171,7 @@ export function useShareImage({
   orientation = 'horizontal',
   records = [],
   chartKeys = [],
+  privacy = true,
 }) {
   const draw = useCallback(async () => {
     const isVertical = orientation === 'vertical';
@@ -233,7 +235,13 @@ export function useShareImage({
       const minLat = Math.min(...lats), maxLat = Math.max(...lats);
       const minLng = Math.min(...lngs), maxLng = Math.max(...lngs);
 
-      const zoom = getBestZoom(minLat, maxLat, minLng, maxLng, mapW, mapH);
+      // Privacy ON (default): max zoom 13, 75 % fill → surroundings visible, start address not readable
+      // Privacy OFF (detail): max zoom 17, 88 % fill → close enough to see street context
+      const zoom = getBestZoom(
+        minLat, maxLat, minLng, maxLng, mapW, mapH,
+        privacy ? 13 : 17,
+        privacy ? 0.75 : 0.88,
+      );
       const centerPx = latLngToPixel((minLat + maxLat) / 2, (minLng + maxLng) / 2, zoom);
       const originX = centerPx.x - mapW / 2;
       const originY = centerPx.y - mapH / 2;
@@ -413,7 +421,7 @@ export function useShareImage({
     }
 
     return canvas;
-  }, [activityName, statsItems, statDate, chartLabels, polyline, orientation, records, chartKeys]);
+  }, [activityName, statsItems, statDate, chartLabels, polyline, orientation, records, chartKeys, privacy]);
 
   const share = useCallback(async (filename = 'activity.png') => {
     const canvas = await draw();
