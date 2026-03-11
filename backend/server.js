@@ -32,6 +32,8 @@ app.use(
       directives: {
         defaultSrc: ["'self'"],
         scriptSrc: ["'self'", "'unsafe-inline'"],
+        // 'none' blocks inline event handlers (onclick=…) — safer than 'unsafe-inline'
+        scriptSrcAttr: ["'none'"],
         styleSrc: ["'self'", "'unsafe-inline'", 'https://unpkg.com'],
         imgSrc: ["'self'", 'data:', 'https://*.tile.openstreetmap.org', 'blob:'],
         // 'https:' allows any HTTPS connection — required so that reverse-proxy
@@ -41,6 +43,12 @@ app.use(
         connectSrc: ["'self'", 'https:'],
         fontSrc: ["'self'"],
         workerSrc: ["'self'", 'blob:'],
+        // Prevent <base> tag injection
+        baseUri: ["'self'"],
+        // Forms may only submit to same origin
+        formAction: ["'self'"],
+        // Block Flash / legacy plugins entirely
+        objectSrc: ["'none'"],
         // Do NOT emit upgrade-insecure-requests — app is designed for local
         // HTTP access and would break asset loading on plain HTTP.
         upgradeInsecureRequests: null,
