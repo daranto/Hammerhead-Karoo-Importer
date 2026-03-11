@@ -235,13 +235,18 @@ export function useShareImage({
       const minLat = Math.min(...lats), maxLat = Math.max(...lats);
       const minLng = Math.min(...lngs), maxLng = Math.max(...lngs);
 
-      // Privacy ON (default): max zoom 13, 75 % fill → surroundings visible, start address not readable
-      // Privacy OFF (detail): max zoom 17, 88 % fill → close enough to see street context
-      const zoom = getBestZoom(
-        minLat, maxLat, minLng, maxLng, mapW, mapH,
-        privacy ? 13 : 17,
-        privacy ? 0.75 : 0.88,
+      // Anonym: route fits within 75 % of the map → context visible, start not readable
+      // Detail: route always fully visible, with a minimal fixed safety margin per side
+      //   (20 px). The fill factor is derived from the actual map dimensions so the
+      //   margin is consistent in pixels across horizontal and vertical layouts.
+      const DETAIL_PAD = 20; // px safety margin per side — route never clips
+      const detailFill = Math.min(
+        (mapW - DETAIL_PAD * 2) / mapW,
+        (mapH - DETAIL_PAD * 2) / mapH,
       );
+      const zoom = privacy
+        ? getBestZoom(minLat, maxLat, minLng, maxLng, mapW, mapH, 15, 0.75)
+        : getBestZoom(minLat, maxLat, minLng, maxLng, mapW, mapH, 17, detailFill);
       const centerPx = latLngToPixel((minLat + maxLat) / 2, (minLng + maxLng) / 2, zoom);
       const originX = centerPx.x - mapW / 2;
       const originY = centerPx.y - mapH / 2;
