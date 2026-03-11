@@ -34,7 +34,7 @@ app.use(
         scriptSrc: ["'self'", "'unsafe-inline'"],
         styleSrc: ["'self'", "'unsafe-inline'", 'https://unpkg.com'],
         imgSrc: ["'self'", 'data:', 'https://*.tile.openstreetmap.org', 'blob:'],
-        connectSrc: ["'self'"],
+        connectSrc: ["'self'", 'https://*.tile.openstreetmap.org'],
         fontSrc: ["'self'"],
         workerSrc: ["'self'", 'blob:'],
         // App runs on HTTP — disable Helmet's production default that upgrades
