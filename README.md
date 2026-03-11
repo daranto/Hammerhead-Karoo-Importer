@@ -4,16 +4,33 @@ A self-hosted PWA to automatically fetch, cache, and visualize cycling activitie
 
 ## ⚠️ Security Warning
 
-**Do not expose this app to the public internet.**
+**This app is designed for personal, local use only. Do not expose it to the public internet.**
 
-This tool is designed for personal, local use only. It stores your SRAM/Hammerhead credentials and OAuth tokens in a local SQLite database and has no multi-user authentication, rate limiting, or hardening against external attacks. Exposing it publicly could allow others to access your account tokens and activity data.
+It stores your SRAM/Hammerhead credentials and OAuth tokens in a local SQLite database and has no multi-user authentication, rate limiting, or hardening against external attacks. Exposing it publicly could allow others to access your account tokens and activity data.
 
 **Recommended access methods:**
 - Run locally on your own machine (`localhost`)
 - Access over a private VPN (e.g. [Tailscale](https://tailscale.com)) from your own devices
 - Restrict access to your local home network only
 
-**Do not** put this behind a public-facing reverse proxy, assign it a public domain, or open it to the internet — even with HTTPS.
+---
+
+### Exposing to the internet – read carefully
+
+If you choose to make the app accessible from the internet despite the above warning, you do so **entirely at your own risk**. No guarantees are made and no liability is accepted for any consequences.
+
+> **⚠️ A reverse proxy alone (nginx, Caddy, Traefik, …) is NOT enough.**
+>
+> A reverse proxy that only terminates TLS and forwards requests adds zero authentication. Anyone who can reach the URL still has full access to the app and all stored data.
+
+If you still want external access, you **must** place a proper authentication layer in front of the app, for example:
+
+- **[Authelia](https://www.authelia.com)** with Caddy or nginx `forward_auth`
+- **[Authentik](https://goauthentik.io)** as a forward-auth provider
+- **[Cloudflare Access](https://www.cloudflare.com/zero-trust/products/access/)** or similar zero-trust gateway
+- A private VPN (Tailscale, WireGuard) – strongly preferred over public exposure
+
+Even with an auth layer in place, the app's attack surface is larger than when accessed purely locally. You are responsible for keeping your infrastructure secure and up to date.
 
 ---
 
