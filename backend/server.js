@@ -34,11 +34,15 @@ app.use(
         scriptSrc: ["'self'", "'unsafe-inline'"],
         styleSrc: ["'self'", "'unsafe-inline'", 'https://unpkg.com'],
         imgSrc: ["'self'", 'data:', 'https://*.tile.openstreetmap.org', 'blob:'],
-        connectSrc: ["'self'", 'https://*.tile.openstreetmap.org'],
+        // 'https:' allows any HTTPS connection — required so that reverse-proxy
+        // auth providers (Authelia, Authentik, …) can redirect unauthenticated
+        // fetch() calls to their own domain without being blocked by CSP.
+        // 'self' covers plain local HTTP access (e.g. http://192.168.x.x:3001).
+        connectSrc: ["'self'", 'https:'],
         fontSrc: ["'self'"],
         workerSrc: ["'self'", 'blob:'],
-        // App runs on HTTP — disable Helmet's production default that upgrades
-        // all requests to HTTPS, which would break asset loading on local network
+        // Do NOT emit upgrade-insecure-requests — app is designed for local
+        // HTTP access and would break asset loading on plain HTTP.
         upgradeInsecureRequests: null,
       },
     },
