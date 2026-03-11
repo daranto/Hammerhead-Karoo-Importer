@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext.jsx';
 import { useT } from '../i18n/I18nContext.jsx';
+import { apiFetch } from '../utils/apiFetch.js';
 import styles from './LoginPage.module.css';
 
 export default function LoginPage() {
@@ -17,9 +18,8 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch('/api/auth/login', {
+      const res = await apiFetch('/api/auth/login', {
         method: 'POST',
-        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });

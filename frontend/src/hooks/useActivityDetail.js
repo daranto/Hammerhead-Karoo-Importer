@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { apiFetch } from '../utils/apiFetch.js';
 
 export function useActivityDetail(activityId) {
   const [activity, setActivity] = useState(null);
@@ -17,8 +18,8 @@ export function useActivityDetail(activityId) {
       setError(null);
       try {
         const [detailRes, polyRes] = await Promise.all([
-          fetch(`/api/activities/${activityId}`, { credentials: 'include' }),
-          fetch(`/api/activities/${activityId}/polyline`, { credentials: 'include' }),
+          apiFetch(`/api/activities/${activityId}`),
+          apiFetch(`/api/activities/${activityId}/polyline`),
         ]);
 
         if (!detailRes.ok) throw new Error('Activity not found');

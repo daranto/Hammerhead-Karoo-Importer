@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { apiFetch } from '../utils/apiFetch.js';
 
 export function useActivities() {
   const [activities, setActivities] = useState([]);
@@ -11,10 +12,7 @@ export function useActivities() {
 
   const loadPage = useCallback(async (pageNum) => {
     try {
-      const res = await fetch(
-        `/api/activities?page=${pageNum}&perPage=${PER_PAGE}`,
-        { credentials: 'include' }
-      );
+      const res = await apiFetch(`/api/activities?page=${pageNum}&perPage=${PER_PAGE}`);
       if (!res.ok) throw new Error('Failed to load activities');
       const data = await res.json();
       const items = data.activities || [];
@@ -45,7 +43,7 @@ export function useActivities() {
     setError(null);
     try {
       const url = force ? '/api/activities/sync?force=true' : '/api/activities/sync';
-      const res = await fetch(url, { method: 'POST', credentials: 'include' });
+      const res = await apiFetch(url, { method: 'POST' });
       if (!res.ok) throw new Error('Sync failed');
       const data = await res.json();
       await loadPage(1);
@@ -65,10 +63,7 @@ export function useActivities() {
   }, [loadPage]);
 
   const deleteActivity = useCallback(async (id) => {
-    const res = await fetch(`/api/activities/${id}`, {
-      method: 'DELETE',
-      credentials: 'include',
-    });
+    const res = await apiFetch(`/api/activities/${id}`, { method: 'DELETE' });
     if (!res.ok) throw new Error('Delete failed');
     setActivities((prev) => prev.filter((a) => a.id !== id));
   }, []);

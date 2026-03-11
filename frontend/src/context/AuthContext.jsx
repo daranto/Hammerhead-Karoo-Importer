@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { apiFetch } from '../utils/apiFetch.js';
 
 const AuthContext = createContext(null);
 
@@ -7,7 +8,7 @@ export function AuthProvider({ children }) {
 
   const checkStatus = useCallback(async () => {
     try {
-      const res = await fetch('/api/auth/status', { credentials: 'include' });
+      const res = await apiFetch('/api/auth/status');
       const data = await res.json();
       setAuth({ loading: false, ...data });
     } catch {
@@ -20,13 +21,13 @@ export function AuthProvider({ children }) {
   }, [checkStatus]);
 
   const logout = useCallback(async () => {
-    await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+    await apiFetch('/api/auth/logout', { method: 'POST' });
     // After session logout, re-check status (auto-login may restore session via stored credentials)
     await checkStatus();
   }, [checkStatus]);
 
   const removeCredentials = useCallback(async () => {
-    await fetch('/api/auth/remove-credentials', { method: 'POST', credentials: 'include' });
+    await apiFetch('/api/auth/remove-credentials', { method: 'POST' });
     setAuth({ loading: false, authenticated: false, userId: null, email: null });
   }, []);
 

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import { useT } from '../i18n/I18nContext.jsx';
+import { apiFetch } from '../utils/apiFetch.js';
 import styles from './Header.module.css';
 
 export default function Header() {
@@ -140,7 +141,7 @@ function ProfileModal({ onClose, t }) {
   const [error, setError]   = useState(null);
 
   useEffect(() => {
-    fetch('/api/profile', { credentials: 'include' })
+    apiFetch('/api/profile')
       .then((r) => r.json())
       .then((data) => {
         if (data.weight_kg != null) setWeight(String(data.weight_kg));
@@ -168,9 +169,8 @@ function ProfileModal({ onClose, t }) {
       if (age !== '')    body.age       = parseInt(age, 10);
       if (gender !== '') body.gender    = gender;
 
-      const res = await fetch('/api/profile', {
+      const res = await apiFetch('/api/profile', {
         method: 'PUT',
-        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });

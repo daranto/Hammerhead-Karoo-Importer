@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { apiFetch } from '../utils/apiFetch.js';
 import styles from './MapThumbnail.module.css';
 
 function decodePolyline(encoded) {
@@ -42,7 +43,7 @@ export default function MapThumbnail({ activityId }) {
 
     async function initMap() {
       try {
-        const res = await fetch(`/api/activities/${activityId}/polyline`, { credentials: 'include' });
+        const res = await apiFetch(`/api/activities/${activityId}/polyline`);
         if (!res.ok) { setNoGps(true); return; }
         const data = await res.json();
         if (!data.encoded_polyline || cancelled) { setNoGps(true); return; }

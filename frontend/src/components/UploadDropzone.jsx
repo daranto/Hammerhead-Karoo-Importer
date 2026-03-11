@@ -1,5 +1,6 @@
 import React, { useRef, useState, useCallback } from 'react';
 import { useT } from '../i18n/I18nContext.jsx';
+import { apiFetch } from '../utils/apiFetch.js';
 import styles from './UploadDropzone.module.css';
 
 export default function UploadDropzone({ onSuccess }) {
@@ -25,9 +26,8 @@ export default function UploadDropzone({ onSuccess }) {
     formData.append('file', file);
 
     try {
-      const res = await fetch('/api/upload', {
+      const res = await apiFetch('/api/upload', {
         method: 'POST',
-        credentials: 'include',
         body: formData,
       });
       const data = await res.json();

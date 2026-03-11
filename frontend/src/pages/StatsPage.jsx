@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { useT } from '../i18n/I18nContext.jsx';
+import { apiFetch } from '../utils/apiFetch.js';
 import styles from './StatsPage.module.css';
 
 const ACT_PER_PAGE = 10;
@@ -69,7 +70,7 @@ export default function StatsPage() {
     setStatsLoading(true);
     const p = new URLSearchParams({ bucket });
     p.set('from', from); p.set('to', to);
-    fetch(`/api/activities/stats?${p}`, { credentials: 'include' })
+    apiFetch(`/api/activities/stats?${p}`)
       .then((r) => r.json()).then(setStats).catch(() => setStats(null))
       .finally(() => setStatsLoading(false));
   }, [from, to, bucket]);
