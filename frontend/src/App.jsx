@@ -9,11 +9,10 @@ import ActivitiesPage from './pages/ActivitiesPage.jsx';
 import ActivityDetailPage from './pages/ActivityDetailPage.jsx';
 import StatsPage from './pages/StatsPage.jsx';
 
-function ProtectedLayout() {
-  const { loading, authenticated } = useAuth();
+function AppLayout() {
+  const { loading } = useAuth();
   const { t } = useT();
   if (loading) return <div className="loading-screen"><span>{t('app.loading')}</span></div>;
-  if (!authenticated) return <Navigate to="/login" replace />;
   return (
     <>
       <Header />
@@ -31,7 +30,7 @@ function AppRoutes() {
         path="/login"
         element={!loading && authenticated ? <Navigate to="/" replace /> : <LoginPage />}
       />
-      <Route element={<ProtectedLayout />}>
+      <Route element={<AppLayout />}>
         <Route path="/" element={<ActivitiesPage />} />
         <Route path="/activities/:id" element={<ActivityDetailPage />} />
         <Route path="/stats" element={<StatsPage />} />

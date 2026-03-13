@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, useMemo, useCallback } from 'react';
 import { useT } from '../i18n/I18nContext.jsx';
+import { useAuth } from '../context/AuthContext.jsx';
 import { useActivities } from '../hooks/useActivities.js';
 import ActivityCard from '../components/ActivityCard.jsx';
 import UploadDropzone from '../components/UploadDropzone.jsx';
@@ -14,6 +15,7 @@ const SORT_OPTIONS = [
 
 export default function ActivitiesPage() {
   const { t } = useT();
+  const { authenticated } = useAuth();
   const { activities, loading, syncing, error, hasMore, loadMore, sync, refresh, deleteActivity } = useActivities();
   const [showUpload, setShowUpload] = useState(false);
   const [syncMsg, setSyncMsg] = useState(null);
@@ -125,42 +127,44 @@ export default function ActivitiesPage() {
           )}
         </button>
 
-        <div className={styles.syncGroup} ref={syncGroupRef}>
-          <button className={styles.syncMain} onClick={handleSync} disabled={syncing}>
-            <svg viewBox="0 0 16 16" width="15" height="15" fill="none"
-              className={syncing ? styles.spinning : ''}>
-              <path d="M13.5 8A5.5 5.5 0 0 1 3.3 11.4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
-              <path d="M2.5 8A5.5 5.5 0 0 1 12.7 4.6" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
-              <path d="M11.2 2.2l2.1 2.4-2.8.8" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M4.8 13.8L2.7 11.4l2.8-.8" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            {syncing ? t('header.syncing') : t('header.sync')}
-          </button>
-          <button
-            className={styles.syncArrow}
-            onClick={() => setSyncMenuOpen((v) => !v)}
-            disabled={syncing}
-            aria-label="Sync options"
-          >
-            <svg viewBox="0 0 10 6" width="9" height="6" fill="none"
-              className={syncMenuOpen ? styles.chevronUp : ''}>
-              <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-          {syncMenuOpen && (
-            <div className={styles.syncDropdown}>
-              <button className={styles.syncDropItem} onClick={handleForceSync}>
-                <svg viewBox="0 0 16 16" width="13" height="13" fill="none">
-                  <path d="M13.5 8A5.5 5.5 0 0 1 3.3 11.4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
-                  <path d="M2.5 8A5.5 5.5 0 0 1 12.7 4.6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
-                  <path d="M11.2 2.2l2.1 2.4-2.8.8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M4.8 13.8L2.7 11.4l2.8-.8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                {t('sync.forceSync')}
-              </button>
-            </div>
-          )}
-        </div>
+        {authenticated && (
+          <div className={styles.syncGroup} ref={syncGroupRef}>
+            <button className={styles.syncMain} onClick={handleSync} disabled={syncing}>
+              <svg viewBox="0 0 16 16" width="15" height="15" fill="none"
+                className={syncing ? styles.spinning : ''}>
+                <path d="M13.5 8A5.5 5.5 0 0 1 3.3 11.4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
+                <path d="M2.5 8A5.5 5.5 0 0 1 12.7 4.6" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
+                <path d="M11.2 2.2l2.1 2.4-2.8.8" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M4.8 13.8L2.7 11.4l2.8-.8" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              {syncing ? t('header.syncing') : t('header.sync')}
+            </button>
+            <button
+              className={styles.syncArrow}
+              onClick={() => setSyncMenuOpen((v) => !v)}
+              disabled={syncing}
+              aria-label="Sync options"
+            >
+              <svg viewBox="0 0 10 6" width="9" height="6" fill="none"
+                className={syncMenuOpen ? styles.chevronUp : ''}>
+                <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+            {syncMenuOpen && (
+              <div className={styles.syncDropdown}>
+                <button className={styles.syncDropItem} onClick={handleForceSync}>
+                  <svg viewBox="0 0 16 16" width="13" height="13" fill="none">
+                    <path d="M13.5 8A5.5 5.5 0 0 1 3.3 11.4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+                    <path d="M2.5 8A5.5 5.5 0 0 1 12.7 4.6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+                    <path d="M11.2 2.2l2.1 2.4-2.8.8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M4.8 13.8L2.7 11.4l2.8-.8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  {t('sync.forceSync')}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {syncMsg && <div className={styles.syncMsg}>{syncMsg}</div>}

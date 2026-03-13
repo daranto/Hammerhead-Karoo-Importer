@@ -38,7 +38,7 @@ export function upsertActivity(metrics, rawJson) {
   });
 }
 
-export function getActivities(userId, { page = 1, perPage = 20, from, to, sortBy, sortDir } = {}) {
+export function getActivities(_userId, { page = 1, perPage = 20, from, to, sortBy, sortDir } = {}) {
   const db = getDb();
   const offset = (page - 1) * perPage;
 
@@ -46,8 +46,8 @@ export function getActivities(userId, { page = 1, perPage = 20, from, to, sortBy
   const col = ALLOWED.has(sortBy) ? sortBy : 'created_at';
   const dir = sortDir === 'asc' ? 'ASC' : 'DESC';
 
-  let where = 'WHERE user_id = ?';
-  const args = [userId];
+  let where = 'WHERE 1=1';
+  const args = [];
   if (from) { where += ' AND substr(created_at,1,10) >= ?'; args.push(from.slice(0, 10)); }
   if (to)   { where += ' AND substr(created_at,1,10) <= ?'; args.push(to.slice(0, 10)); }
 
@@ -149,10 +149,10 @@ export function getPolyline(activityId) {
   };
 }
 
-export function getStats(userId, { from, to, bucket = 'month' } = {}) {
+export function getStats(_userId, { from, to, bucket = 'month' } = {}) {
   const db = getDb();
-  let where = 'user_id = ?';
-  const args = [userId];
+  let where = '1=1';
+  const args = [];
   if (from) { where += ' AND substr(created_at,1,10) >= ?'; args.push(from.slice(0, 10)); }
   if (to)   { where += ' AND substr(created_at,1,10) <= ?'; args.push(to.slice(0, 10)); }
 

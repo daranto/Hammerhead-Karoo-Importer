@@ -69,7 +69,7 @@ export default function Header() {
             </button>
           </nav>
 
-          {/* User menu */}
+          {/* User menu – always visible */}
           <div className={styles.userArea} ref={menuRef}>
             <button
               className={`${styles.userBtn} ${menuOpen ? styles.userBtnOpen : ''}`}
@@ -88,9 +88,11 @@ export default function Header() {
             {menuOpen && (
               <div className={styles.dropdown}>
                 {email && (
-                  <div className={styles.dropEmail}>{email}</div>
+                  <>
+                    <div className={styles.dropEmail}>{email}</div>
+                    <div className={styles.dropDivider}/>
+                  </>
                 )}
-                <div className={styles.dropDivider}/>
                 <button className={styles.dropItem} onClick={openProfile}>
                   <svg viewBox="0 0 16 16" width="14" height="14" fill="none">
                     <circle cx="8" cy="5.5" r="2.5" stroke="currentColor" strokeWidth="1.5"/>
@@ -113,13 +115,23 @@ export default function Header() {
                   </div>
                 </div>
                 <div className={styles.dropDivider}/>
-                <button className={styles.dropLogout} onClick={handleLogout}>
-                  <svg viewBox="0 0 16 16" width="14" height="14" fill="none">
-                    <path d="M6 14H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M10.5 11l3-3-3-3M13.5 8H6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  {t('header.signOut')}
-                </button>
+                {email ? (
+                  <button className={styles.dropLogout} onClick={handleLogout}>
+                    <svg viewBox="0 0 16 16" width="14" height="14" fill="none">
+                      <path d="M6 14H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M10.5 11l3-3-3-3M13.5 8H6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    {t('header.signOut')}
+                  </button>
+                ) : (
+                  <button className={styles.dropItem} onClick={() => { setMenuOpen(false); navigate('/login'); }}>
+                    <svg viewBox="0 0 16 16" width="14" height="14" fill="none">
+                      <path d="M10 14h3a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1h-3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M6.5 11l3-3-3-3M9.5 8H2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    {t('header.connectSram')}
+                  </button>
+                )}
               </div>
             )}
           </div>

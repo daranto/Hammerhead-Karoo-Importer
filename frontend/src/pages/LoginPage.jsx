@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import { useT } from '../i18n/I18nContext.jsx';
 import { apiFetch } from '../utils/apiFetch.js';
@@ -7,6 +8,7 @@ import styles from './LoginPage.module.css';
 export default function LoginPage() {
   const { checkStatus } = useAuth();
   const { t, lang, switchLang } = useT();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -88,6 +90,9 @@ export default function LoginPage() {
         </form>
 
         <p className={styles.note}>{t('login.note')}</p>
+        <button className={styles.skipBtn} onClick={() => navigate('/')}>
+          {t('login.skip')}
+        </button>
       </div>
     </div>
   );

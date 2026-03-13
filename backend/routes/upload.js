@@ -23,10 +23,10 @@ const upload = multer({
   },
 });
 
-router.post('/', requireAuth, upload.single('file'), async (req, res) => {
+router.post('/', upload.single('file'), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
 
-  const userId = req.session.userId;
+  const userId = req.session?.userId || 'local';
   const activityId = `local.activity.${randomUUID()}`;
   const isFit = req.file.originalname.toLowerCase().endsWith('.fit');
 

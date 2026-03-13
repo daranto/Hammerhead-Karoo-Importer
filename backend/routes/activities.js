@@ -19,10 +19,10 @@ import getDb from '../db/database.js';
 
 const router = Router();
 
-// GET /api/activities  – cached list
-router.get('/', requireAuth, (req, res) => {
+// GET /api/activities  – cached list (no auth required)
+router.get('/', (req, res) => {
   const { page = 1, perPage = 20, from, to, sortBy, sortDir } = req.query;
-  const result = getActivities(req.session.userId, {
+  const result = getActivities(null, {
     page: parseInt(page),
     perPage: parseInt(perPage),
     from, to, sortBy, sortDir,
@@ -30,10 +30,10 @@ router.get('/', requireAuth, (req, res) => {
   res.json(result);
 });
 
-// GET /api/activities/stats
-router.get('/stats', requireAuth, (req, res) => {
+// GET /api/activities/stats (no auth required)
+router.get('/stats', (req, res) => {
   const { from, to, bucket } = req.query;
-  const result = getStats(req.session.userId, { from, to, bucket });
+  const result = getStats(null, { from, to, bucket });
   res.json(result);
 });
 
@@ -101,16 +101,16 @@ router.post('/sync', requireAuth, async (req, res) => {
   }
 });
 
-// GET /api/activities/:id  – details + GPS records
-router.get('/:id', requireAuth, async (req, res) => {
+// GET /api/activities/:id  – details + GPS records (no auth required for cached data)
+router.get('/:id', async (req, res) => {
   const { id } = req.params;
-  const userId = req.session.userId;
+  const userId = req.session?.userId;
 
   // Check cache first
   let activity = getActivity(id);
   let records = getRecords(id);
 
-  if (!activity || records.length === 0) {
+  if ((!activity || records.length === 0) && userId) {
     try {
       const details = await fetchActivityDetails(userId, id);
 
@@ -143,10 +143,10 @@ router.get('/:id', requireAuth, async (req, res) => {
   res.json({ activity, records });
 });
 
-// GET /api/activities/:id/polyline
-router.get('/:id/polyline', requireAuth, async (req, res) => {
+// GET /api/activities/:id/polyline (no auth required for cached data)
+router.get('/:id/polyline', async (req, res) => {
   const { id } = req.params;
-  const userId = req.session.userId;
+  const userId = req.session?.userId;
 
   let poly = getPolyline(id);
 
@@ -161,8 +161,8 @@ router.get('/:id/polyline', requireAuth, async (req, res) => {
       poly = getPolyline(id);
     }
 
-    if (!poly) {
-      // Fetch from API
+    if (!poly && userId) {
+      // Fetch from API (only if authenticated)
       try {
         const details = await fetchActivityDetails(userId, id);
         const colData = details.recordData || details.records || {};
@@ -234,8 +234,8 @@ function transposeColumns(colData, activityId) {
   return records;
 }
 
-// DELETE /api/activities/:id
-router.delete('/:id', requireAuth, (req, res) => {
+// DELETE /api/activities/:id (no auth required – single-user app)
+router.delete('/:id', (req, res) => {
   const { id } = req.params;
   const activity = getActivity(id);
   if (!activity) return res.status(404).json({ error: 'Activity not found' });
